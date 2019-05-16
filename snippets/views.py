@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 
 # Create your views here.
@@ -30,7 +30,7 @@ class SnippetDetailView(View):
         try:
             snippet = Snippet.objects.get(pk=pk)
         except Snippet.DoesNotExist:
-            return JsonResponse(status=404, safe=False)
+            return HttpResponse('id={0}，对象不存在'.format(pk), status=404)
 
         serializer = SnippetSerializer(snippet)
         return JsonResponse(serializer.data, safe=False)
@@ -39,7 +39,7 @@ class SnippetDetailView(View):
         try:
             snippet = Snippet.objects.get(pk=pk)
         except Snippet.DoesNotExist:
-            return JsonResponse(status=404, safe=False)
+            return HttpResponse('id={0}，对象不存在'.format(pk), status=404)
 
         data = JSONParser().parse(request)
         serializer = SnippetSerializer(snippet, data)
@@ -53,7 +53,7 @@ class SnippetDetailView(View):
         try:
             snippet = Snippet.objects.get(pk=pk)
         except Snippet.DoesNotExist:
-            return JsonResponse(status=404, safe=False)
+            return HttpResponse('id={0}，对象不存在'.format(pk), status=404)
 
         snippet.delete()
         return JsonResponse(status=204, safe=False)
