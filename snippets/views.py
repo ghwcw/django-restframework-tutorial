@@ -46,7 +46,6 @@ class SnippetDetailView(View):
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data, safe=False)
-
         else:
             return JsonResponse(serializer.errors, status=400, safe=False)
 

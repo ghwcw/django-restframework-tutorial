@@ -15,7 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 from snippets.views import *
 
 urlpatterns = [
-    path('snippets/', csrf_exempt(SnippetListView.as_view())),
-    path('snippets/<int:pk>', csrf_exempt(SnippetDetailView.as_view())),
+    path('snippets/', SnippetListView.as_view()),
+    path('snippets/<int:pk>', SnippetDetailView.as_view()),
 ]
 
