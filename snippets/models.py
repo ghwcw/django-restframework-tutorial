@@ -9,6 +9,9 @@ STYLE_CHOICES = sorted((item, item) for item in get_all_styles())
 
 
 class Snippet(models.Model):
+    """
+    数据结构
+    """
     created = models.DateTimeField(verbose_name='创建时间', auto_now_add=True)
     title = models.CharField(verbose_name='标题', max_length=100, blank=True, null=True, default='')
     code = models.TextField(verbose_name='代码')
