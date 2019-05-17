@@ -10,7 +10,7 @@ Description :
 -------------------------------------------------------------
 """
 from django.urls import path
-from django.views.decorators.csrf import csrf_exempt
+from rest_framework.urlpatterns import format_suffix_patterns
 
 from snippets.views import *
 
@@ -19,3 +19,4 @@ urlpatterns = [
     path('snippets/<int:pk>', SnippetDetailView.as_view()),
 ]
 
+urlpatterns = format_suffix_patterns(urlpatterns)
