@@ -15,7 +15,7 @@ class Snippet(models.Model):
     created = models.DateTimeField(verbose_name='创建时间', auto_now_add=True)
     title = models.CharField(verbose_name='标题', max_length=100, blank=True, null=True, default='')
     code = models.TextField(verbose_name='代码')
-    linenos = models.BooleanField(verbose_name='是否', default=False)
+    linenos = models.BooleanField(verbose_name='是否显示行号', default=False)
     language = models.CharField(verbose_name='编程语言', choices=LANGUAGE_CHOICES, default='python', max_length=100)
     style = models.CharField(verbose_name='风格', choices=STYLE_CHOICES, default='friendly', max_length=100)
 
