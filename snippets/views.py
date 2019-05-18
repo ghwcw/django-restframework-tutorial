@@ -1,17 +1,21 @@
-# from django.http import JsonResponse, HttpResponse
-#
 # # Create your views here.
-# from django.shortcuts import get_object_or_404
-# from rest_framework import status
-from rest_framework.generics import GenericAPIView
-from rest_framework import mixins
+from django.http import JsonResponse, HttpResponse
 
-# from rest_framework.parsers import JSONParser
-# from rest_framework.response import Response
-# from rest_framework.views import APIView
+from django.shortcuts import get_object_or_404
+from rest_framework import status
+from django.contrib.auth.models import User
+from rest_framework import mixins, permissions
+
+from rest_framework.parsers import JSONParser
+from rest_framework.renderers import StaticHTMLRenderer
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
+from rest_framework.views import APIView
+from rest_framework.generics import GenericAPIView, RetrieveAPIView
 
 from snippets.models import Snippet
-from snippets.serializer import SnippetSerializer
+from snippets.permissions import IsOwnerOrReadOnly
+from snippets.serializer import SnippetSerializer, UserSerializer
 
 from rest_framework import generics
 
@@ -77,7 +81,7 @@ from rest_framework import generics
 #
 #     def post(self, request):
 #         return self.create(request)
-#
+
 #
 # class SnippetDetailView(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, GenericAPIView):
 #     queryset = Snippet.objects.all()
@@ -93,14 +97,64 @@ from rest_framework import generics
 #         return self.destroy(request, pk=pk)
 
 
-# 继承更加简洁的通用视图类
 class SnippetListView(generics.ListCreateAPIView):
-
+    """
+    继承更加简洁的通用视图类
+    """
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
+    # 添加视图权限
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 
 class SnippetDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
+    # 添加视图权限
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+
+
+class UserListView(generics.ListAPIView):
+    """
+    用户视图列表
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class UserDetailView(generics.RetrieveAPIView):
+    """
+    用户视图细节
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class RootAPIView(GenericAPIView):
+    """
+    为我们的API创建一个根视图
+    """
+    def get(self, request, format=None):
+        return Response({
+            'users': reverse('snippets:users-list', request=request, format=format),
+            'snippets': reverse('snippets:snippets-list', request=request, format=format)
+        })
+
+
+class SnippetHighlight(RetrieveAPIView):
+    """
+    为高亮显示的代码片段创建视图
+    """
+    queryset = Snippet.objects.all()
+    renderer_classes = [StaticHTMLRenderer]
+
+    def get(self, request, *args, **kwargs):
+        snippet = self.get_object()
+        return Response(data=snippet.highlight)
+
+
+
 

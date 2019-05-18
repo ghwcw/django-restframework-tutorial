@@ -16,8 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from snippets.views import SnippetListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('snippets.urls'))
+    path('', SnippetListView.as_view(), name='home'),
+    path('snippets/', include('snippets.urls')),      # snippets App
+    path('login-out/', include('rest_framework.urls')),     # 登录和退出
 ]
+
+

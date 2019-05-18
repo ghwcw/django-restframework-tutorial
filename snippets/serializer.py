@@ -9,7 +9,7 @@
 Description : 
 -------------------------------------------------------------
 """
-
+from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from snippets.models import LANGUAGE_CHOICES, STYLE_CHOICES, Snippet
@@ -59,7 +59,22 @@ class SnippetSerializer(serializers.ModelSerializer):
     数据序列化
     类似于Django表单
     """""
+    owner = serializers.ReadOnlyField(source='owner.username')
+    # highlight = serializers.HyperlinkedIdentityField(view_name='snippets:highlight', read_only=True, format='html')
 
     class Meta:
         model = Snippet
-        fields = ('id', 'title', 'code', 'linenos', 'language', 'style')
+        fields = '__all__'
+
+
+# 用户信息序列化
+class UserSerializer(serializers.ModelSerializer):
+    # snippets = serializers.PrimaryKeyRelatedField(queryset=Snippet.objects.all(), many=True)
+
+    class Meta:
+        model = User
+
+        fields = ['id', 'username',]
+
+
+
