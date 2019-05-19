@@ -43,7 +43,7 @@ urlpatterns = [
     path('', SnippetViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('snippets/', SnippetViewSet.as_view({'get': 'list', 'post': 'create'})),
     path('snippets/<int:pk>/', SnippetViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
-    path('snippets/<int:pk>/highlight/', SnippetViewSet.as_view({'get': 'get_highlight'})),
+    path('snippets/<int:pk>/highlight/', SnippetViewSet.as_view({'get': 'get_highlight'}, renderer_classes=[StaticHTMLRenderer])),
 
 ]
 
