@@ -100,64 +100,64 @@ from rest_framework import generics
 
 # -----------------------------------------------------------------------
 
-class SnippetListView(generics.ListCreateAPIView):
-    """
-    继承更加简洁的通用视图类
-    """
-    queryset = Snippet.objects.all()
-    serializer_class = SnippetSerializer
-    # 添加视图权限
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-
-
-class SnippetDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Snippet.objects.all()
-    serializer_class = SnippetSerializer
-    # 添加视图权限
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
-
-
-class UserListView(generics.ListAPIView):
-    """
-    用户视图列表
-    """
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-
-class UserDetailView(generics.RetrieveAPIView):
-    """
-    用户视图细节
-    """
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-
-class RootAPIView(GenericAPIView):
-    """
-    为我们的API创建一个根视图
-    """
-
-    def get(self, request, format=None):
-        return Response({
-            'users': reverse('snippets:users-list', request=request, format=format),
-            'snippets': reverse('snippets:snippets-list', request=request, format=format)
-        })
-
-
-class SnippetHighlight(RetrieveAPIView):
-    """
-    为高亮显示的代码片段创建视图
-    """
-    queryset = Snippet.objects.all()
-    renderer_classes = [StaticHTMLRenderer]
-
-    def get(self, request, *args, **kwargs):
-        snippet = self.get_object()
-        return Response(data=snippet.highlight)
+# class SnippetListView(generics.ListCreateAPIView):
+#     """
+#     继承更加简洁的通用视图类
+#     """
+#     queryset = Snippet.objects.all()
+#     serializer_class = SnippetSerializer
+#     # 添加视图权限
+#     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+#
+#     def perform_create(self, serializer):
+#         serializer.save(owner=self.request.user)
+#
+#
+# class SnippetDetailView(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Snippet.objects.all()
+#     serializer_class = SnippetSerializer
+#     # 添加视图权限
+#     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+#
+#
+# class UserListView(generics.ListAPIView):
+#     """
+#     用户视图列表
+#     """
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+#
+#
+# class UserDetailView(generics.RetrieveAPIView):
+#     """
+#     用户视图细节
+#     """
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+#
+#
+# class RootAPIView(GenericAPIView):
+#     """
+#     为我们的API创建一个根视图
+#     """
+#
+#     def get(self, request, format=None):
+#         return Response({
+#             'users': reverse('snippets:users-list', request=request, format=format),
+#             'snippets': reverse('snippets:snippets-list', request=request, format=format)
+#         })
+#
+#
+# class SnippetHighlight(RetrieveAPIView):
+#     """
+#     为高亮显示的代码片段创建视图
+#     """
+#     queryset = Snippet.objects.all()
+#     renderer_classes = [StaticHTMLRenderer]
+#
+#     def get(self, request, *args, **kwargs):
+#         snippet = self.get_object()
+#         return Response(data=snippet.highlight)
 
 
 # -----------------------------------------------------------------------
