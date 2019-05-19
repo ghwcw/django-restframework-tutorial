@@ -16,14 +16,11 @@ from snippets.views import *
 
 app_name = 'snippets'
 urlpatterns = [
-    path('', SnippetListView.as_view(), name='snippets-list'),
-    path('<int:pk>/', SnippetDetailView.as_view(), name='snippets-detail'),
-
-    path('users/', UserListView.as_view(), name='users-list'),
-    path('users/<int:pk>/', UserDetailView.as_view(), name='users-detail'),
-
-    path('rootapi/', RootAPIView.as_view(), name='rootapi'),
-    path('<int:pk>/highlight/', SnippetHighlight.as_view(), name='highlight'),
+    # path('', SnippetListView.as_view(), name='snippets-list'),
+    # path('<int:pk>/', SnippetDetailView.as_view(), name='snippet-detail'),
+    #
+    # path('rootapi/', RootAPIView.as_view(), name='rootapi'),
+    # path('<int:pk>/highlight/', SnippetHighlight.as_view(), name='highlight'),
 
 ]
 

@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status
 from django.contrib.auth.models import User
 from rest_framework import mixins, permissions
+from rest_framework.decorators import detail_route
 
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import StaticHTMLRenderer
@@ -12,6 +13,7 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView, RetrieveAPIView
+from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 
 from snippets.models import Snippet
 from snippets.permissions import IsOwnerOrReadOnly
@@ -96,6 +98,7 @@ from rest_framework import generics
 #     def delete(self, request, pk):
 #         return self.destroy(request, pk=pk)
 
+# -----------------------------------------------------------------------
 
 class SnippetListView(generics.ListCreateAPIView):
     """
@@ -137,6 +140,7 @@ class RootAPIView(GenericAPIView):
     """
     为我们的API创建一个根视图
     """
+
     def get(self, request, format=None):
         return Response({
             'users': reverse('snippets:users-list', request=request, format=format),
@@ -156,5 +160,31 @@ class SnippetHighlight(RetrieveAPIView):
         return Response(data=snippet.highlight)
 
 
+# -----------------------------------------------------------------------
 
+# 使用ViewSets重构，继承涵盖ListModelView、RetrieveModelView、UpdateModelView等；
+# 按Model分别写视图集合，一个Model一个视图集合。
+class UserViewSet(ReadOnlyModelViewSet):
+    """
+    此视图自动提供`list`和`retrieve`操作。
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class SnippetViewSet(ModelViewSet):
+    """
+    此视图自动提供`list`，`create`，`retrieve`，`update`和`destroy`操作。
+    """
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+    @detail_route(renderer_classes=[StaticHTMLRenderer])
+    def get_highlight(self, request, *args, **kwargs):
+        snippet = self.get_object()
+        return Response(data=snippet.highlight)
 

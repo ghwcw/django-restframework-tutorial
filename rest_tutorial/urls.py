@@ -15,14 +15,36 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 
-from snippets.views import SnippetListView
+from snippets.views import *
+
+# 创建视图集合路由器并注册我们的视图。
+# router = DefaultRouter()
+# router.register(r'users', UserViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', SnippetListView.as_view(), name='home'),
-    path('snippets/', include('snippets.urls')),      # snippets App
+
+    # path('', SnippetListView.as_view(), name='home'),
+    # path('snippets/', include('snippets.urls')),      # snippets App
+    # path('users/', UserListView.as_view(), name='users-list'),
+    # path('users/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
+
     path('login-out/', include('rest_framework.urls')),     # 登录和退出
+
+    # router路由器配置
+    # path('', include(router.urls)),
+
+    # 配置视图结合路由：as_view({'action方法': '对象操作方法'})
+    path('users/', UserViewSet.as_view({'get': 'list'})),
+    path('users/<int:pk>/', UserViewSet.as_view({'get': 'retrieve'})),
+
+    path('', SnippetViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('snippets/', SnippetViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('snippets/<int:pk>/', SnippetViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
+    path('snippets/<int:pk>/highlight/', SnippetViewSet.as_view({'get': 'get_highlight'})),
+
 ]
 
 
