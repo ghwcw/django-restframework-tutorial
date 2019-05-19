@@ -162,9 +162,9 @@ from rest_framework import generics
 
 # -----------------------------------------------------------------------
 
-# 使用ViewSets重构，继承涵盖ListModelView、RetrieveModelView、UpdateModelView等；
-# 按Model分别写视图集合，一个Model一个视图集合。
 class UserViewSet(ReadOnlyModelViewSet):
+    # 使用ViewSets重构，继承涵盖ListModelView、RetrieveModelView、UpdateModelView等；
+    # 按Model分别写视图集合，一个Model一个视图集合。
     """
     此视图自动提供`list`和`retrieve`操作。
     """
@@ -183,7 +183,7 @@ class SnippetViewSet(ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
-    def get_highlight(self, request, *args, **kwargs):
+    def get_highlight(self, request, pk):
         snippet = self.get_object()
         return Response(data=snippet.highlight)
 
