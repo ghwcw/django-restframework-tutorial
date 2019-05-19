@@ -36,7 +36,7 @@ urlpatterns = [
     # router路由器配置
     # path('', include(router.urls)),
 
-    # 配置视图结合路由：as_view({'action方法': '对象操作方法'})
+    # 配置视图集合路由：as_view({'action方法': '对象操作方法'})
     path('users/', UserViewSet.as_view({'get': 'list'})),
     path('users/<int:pk>/', UserViewSet.as_view({'get': 'retrieve'})),
 
