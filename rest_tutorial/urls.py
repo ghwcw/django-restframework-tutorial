@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+from rest_framework.schemas import get_schema_view
 
 from snippets.views import *
 
@@ -36,14 +37,17 @@ urlpatterns = [
     # router路由器配置
     # path('', include(router.urls)),
 
+    # -------------------------------------------------------------
     # 配置视图集合路由：as_view({'action方法': '对象操作方法'})
     path('users/', UserViewSet.as_view({'get': 'list'})),
     path('users/<int:pk>/', UserViewSet.as_view({'get': 'retrieve'})),
 
+    # 配置Snippet App路由
     path('', SnippetViewSet.as_view({'get': 'list', 'post': 'create'})),
-    path('snippets/', SnippetViewSet.as_view({'get': 'list', 'post': 'create'})),
-    path('snippets/<int:pk>/', SnippetViewSet.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'})),
-    path('snippets/<int:pk>/highlight/', SnippetViewSet.as_view({'get': 'get_highlight'}, renderer_classes=[StaticHTMLRenderer])),
+    path('snippets/', include('snippets.urls')),
+
+    # CoreJSON
+    path('schema/', get_schema_view(title='CoreJson')),
 
 ]
 

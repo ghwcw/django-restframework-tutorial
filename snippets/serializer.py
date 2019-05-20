@@ -62,7 +62,7 @@ class SnippetSerializer(serializers.ModelSerializer):
         关联关系使用HyperlinkedRelatedField，而不是PrimaryKeyRelatedField。
     """""
     owner = serializers.ReadOnlyField(source='owner.username')
-    # highlight = serializers.HyperlinkedIdentityField(view_name='snippets:highlight', read_only=True, format='html')
+    # highlight = serializers.HyperlinkedIdentityField(view_name='highlight', read_only=True, format='html')
 
     class Meta:
         model = Snippet
@@ -71,12 +71,12 @@ class SnippetSerializer(serializers.ModelSerializer):
 
 # 用户信息序列化
 class UserSerializer(serializers.ModelSerializer):
-    # snippet = serializers.PrimaryKeyRelatedField(queryset=Snippet.objects.all(), many=True)
+    # snippets = serializers.PrimaryKeyRelatedField(many=True, queryset=Snippet.objects.all())
 
     class Meta:
         model = User
 
-        fields = ['id', 'username',]
+        fields = ['id', 'username']
 
 
 

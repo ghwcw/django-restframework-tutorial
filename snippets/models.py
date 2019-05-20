@@ -19,7 +19,7 @@ class Snippet(models.Model):
     code = models.TextField(verbose_name='代码')
     linenos = models.BooleanField(verbose_name='是否显示行号', default=False)
     language = models.CharField(verbose_name='编程语言', choices=LANGUAGE_CHOICES, default='python', max_length=100)
-    style = models.CharField(verbose_name='风格', choices=STYLE_CHOICES, default='friendly', max_length=100)
+    style = models.CharField(verbose_name='风格', choices=STYLE_CHOICES, default='native', max_length=100)
     owner = models.ForeignKey(verbose_name='用户', to=User, on_delete=models.CASCADE)
     highlight = models.TextField(verbose_name='高亮演示', default='')
 
