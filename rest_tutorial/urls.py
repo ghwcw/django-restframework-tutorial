@@ -38,13 +38,19 @@ urlpatterns = [
     # path('', include(router.urls)),
 
     # -------------------------------------------------------------
-    # 配置视图集合路由：as_view({'action方法': '对象操作方法'})
-    path('users/', UserViewSet.as_view({'get': 'list'})),
-    path('users/<int:pk>/', UserViewSet.as_view({'get': 'retrieve'})),
 
-    # 配置Snippet App路由
-    path('', SnippetViewSet.as_view({'get': 'list', 'post': 'create'})),
-    path('snippets/', include('snippets.urls')),
+    # 配置访问入口
+    path('rootapi/', RootAPIView.as_view()),
+    path('', RootAPIView.as_view()),
+
+    # 配置视图集合路由：as_view({'action方法': '对象操作方法'})
+    # 配置User路由
+    path('users/', UserViewSet.as_view({'get': 'list'}), name='users-list'),
+    path('users/<int:pk>/', UserViewSet.as_view({'get': 'retrieve'}), name='user-detail'),
+
+    # 导入Snippet App路由
+    # path('', SnippetViewSet.as_view({'get': 'list', 'post': 'create'})),
+    path('snippets/', include('snippets.urls', namespace='snippets')),
 
     # CoreJSON
     path('schema/', get_schema_view(title='CoreJson')),

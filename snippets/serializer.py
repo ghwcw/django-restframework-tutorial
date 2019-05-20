@@ -54,29 +54,29 @@ from snippets.models import LANGUAGE_CHOICES, STYLE_CHOICES, Snippet
 
 
 # 使用Model序列化
-class SnippetSerializer(serializers.ModelSerializer):
+class SnippetSerializer(serializers.HyperlinkedModelSerializer):
     """
-    数据序列化    类似于Django表单。
-    HyperlinkedModelSerializer：
+    数据序列化   类似于Django表单。
+    `HyperlinkedModelSerializer`：
         它包含一个url字段，使用HyperlinkedIdentityField；
         关联关系使用HyperlinkedRelatedField，而不是PrimaryKeyRelatedField。
     """""
     owner = serializers.ReadOnlyField(source='owner.username')
-    # highlight = serializers.HyperlinkedIdentityField(view_name='highlight', read_only=True, format='html')
+    url = serializers.HyperlinkedIdentityField(view_name='snippets:snippet-detail')
+    highlight = serializers.HyperlinkedIdentityField(view_name='snippets:snippet-highlight', format='html')
 
     class Meta:
         model = Snippet
-        fields = '__all__'
+        fields = ('url', 'id', 'owner', 'title', 'code',
+                  'linenos', 'language', 'style', 'highlight')
 
 
 # 用户信息序列化
-class UserSerializer(serializers.ModelSerializer):
-    # snippets = serializers.PrimaryKeyRelatedField(many=True, queryset=Snippet.objects.all())
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    # snippets = serializers.HyperlinkedRelatedField(many=True, view_name='snippets:snippet-detail', read_only=True)
 
     class Meta:
         model = User
-
-        fields = ['id', 'username']
-
+        fields = ('url', 'id', 'username', )
 
 

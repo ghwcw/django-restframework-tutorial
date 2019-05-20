@@ -136,18 +136,6 @@ from rest_framework import generics
 #     serializer_class = UserSerializer
 #
 #
-# class RootAPIView(GenericAPIView):
-#     """
-#     为我们的API创建一个根视图
-#     """
-#
-#     def get(self, request, format=None):
-#         return Response({
-#             'users': reverse('snippets:users-list', request=request, format=format),
-#             'snippets': reverse('snippets:snippets-list', request=request, format=format)
-#         })
-#
-#
 # class SnippetHighlight(RetrieveAPIView):
 #     """
 #     为高亮显示的代码片段创建视图
@@ -160,10 +148,22 @@ from rest_framework import generics
 #         return Response(data=snippet.highlight)
 
 
+class RootAPIView(GenericAPIView):
+    """
+    为我们的API创建一个根视图
+    """
+
+    def get(self, request, format=None):
+        return Response({
+            'users': reverse('users-list', request=request, format=format),
+            'snippets': reverse('snippets:snippets-list', request=request, format=format)
+        })
+
+
 # -----------------------------------------------------------------------
 
 class UserViewSet(ReadOnlyModelViewSet):
-    # 使用ViewSets重构，继承涵盖ListModelView、RetrieveModelView、UpdateModelView等；
+    # 使用ViewSets重构，继承涵盖`ListModelView`、`RetrieveModelView`、`UpdateModelView`等；
     # 按Model分别写视图集合，一个Model一个视图集合。
     """
     此视图自动提供`list`和`retrieve`操作。
