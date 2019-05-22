@@ -73,10 +73,11 @@ class SnippetSerializer(serializers.HyperlinkedModelSerializer):
 
 # 用户信息序列化
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    # snippets = serializers.HyperlinkedRelatedField(many=True, view_name='snippets:snippet-detail', read_only=True)
+    # 一定要注意这里的“snippet_set”变量必须和关联模型Snippet（从表）的外键owner指定的参数related_name相同（默认后缀为_set）！
+    snippet_set = serializers.HyperlinkedRelatedField(view_name='snippets:snippet-detail', many=True, read_only=True)
 
     class Meta:
         model = User
-        fields = ('url', 'id', 'username', )
+        fields = ('url', 'id', 'username', 'snippet_set')
 
 
