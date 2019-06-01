@@ -46,7 +46,7 @@ urlpatterns = [
     # 配置视图集合路由：as_view({'action方法': '对象操作方法'})
     # 配置User路由
     path('users/', UserViewSet.as_view({'get': 'list'}), name='users-list'),
-    path('users/<int:pk>/', UserViewSet.as_view({'get': 'retrieve'}), name='user-detail'),
+    path('user/<int:pk>/', UserViewSet.as_view({'get': 'retrieve'}), name='user-detail'),
 
     # 导入Snippet App路由
     # path('', SnippetViewSet.as_view({'get': 'list', 'post': 'create'})),

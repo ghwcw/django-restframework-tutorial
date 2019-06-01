@@ -163,18 +163,20 @@ class RootAPIView(GenericAPIView):
 # -----------------------------------------------------------------------
 
 class UserViewSet(ReadOnlyModelViewSet):
-    # 使用ViewSets重构，继承涵盖`ListModelView`、`RetrieveModelView`、`UpdateModelView`等；
+    # 使用ViewSet重构，继承涵盖`ListModelMixin`、`RetrieveModelMixin`、`UpdateModelMixin`、`DestroyModelMixin`等；
     # 按Model分别写视图集合，一个Model一个视图集合。
     """
-    此视图自动提供`list`和`retrieve`操作。
+    此视图自动提供`list()`和`retrieve()`操作。
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
 class SnippetViewSet(ModelViewSet):
+    # 使用ViewSet重构，继承涵盖`ListModelMixin`、`RetrieveModelMixin`、`UpdateModelMixin`、`DestroyModelMixin`等；
+    # 按Model分别写视图集合，一个Model一个视图集合。
     """
-    此视图自动提供`list`，`create`，`retrieve`，`update`和`destroy`操作。
+    此视图自动提供`list()`，`create()`，`retrieve()`，`update()`和`destroy()`操作。
     """
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
@@ -186,4 +188,3 @@ class SnippetViewSet(ModelViewSet):
     def get_highlight(self, request, pk):
         snippet = self.get_object()
         return Response(data=snippet.highlight)
-

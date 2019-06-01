@@ -56,7 +56,7 @@ from snippets.models import LANGUAGE_CHOICES, STYLE_CHOICES, Snippet
 # 使用Model序列化
 class SnippetSerializer(serializers.HyperlinkedModelSerializer):
     """
-    数据序列化   类似于Django表单。
+    数据序列化  类似于Django表单。
     `HyperlinkedModelSerializer`：
         它包含一个url字段，使用HyperlinkedIdentityField；
         关联关系使用HyperlinkedRelatedField，而不是PrimaryKeyRelatedField。
