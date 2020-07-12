@@ -53,7 +53,7 @@ urlpatterns = [
     path('snippets/', include('snippets.urls', namespace='snippets')),
 
     # CoreJSON
-    path('schema/', get_schema_view(title='CoreJson')),
+    # path('schema/', get_schema_view(title='CoreJson')),
 
 ]
 

@@ -161,6 +161,7 @@ class RootAPIView(GenericAPIView):
 
 
 # -----------------------------------------------------------------------
+# 模型视图集合
 
 class UserViewSet(ReadOnlyModelViewSet):
     # 使用ViewSet重构，继承涵盖`ListModelMixin`、`RetrieveModelMixin`、`UpdateModelMixin`、`DestroyModelMixin`等；
@@ -180,7 +181,20 @@ class SnippetViewSet(ModelViewSet):
     """
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+
+    def update(self, request, *args, **kwargs):
+        """
+        重写update()方法，用以自定义返回内容。
+        """
+        # partial = kwargs.setdefault('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return JsonResponse({'resType': 1, 'resContent': '更新成功'})
+        return JsonResponse({'resType': -1, 'resContent': '更新失败'})
+
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]       # 身份验证
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)

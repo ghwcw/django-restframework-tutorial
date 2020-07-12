@@ -10,6 +10,7 @@ Description :
 -------------------------------------------------------------
 """
 from django.urls import path, re_path
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from snippets.views import *
@@ -23,7 +24,7 @@ urlpatterns = [
     # path('<int:pk>/highlight/', SnippetHighlight.as_view(), name='highlight'),
 
     path('', SnippetViewSet.as_view({'get': 'list', 'post': 'create'}), name='snippets-list'),
-    path('<int:pk>/', SnippetViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'}), name='snippet-detail'),
+    path('<int:pk>/', csrf_exempt(SnippetViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})), name='snippet-detail'),
     path('<int:pk>/highlight/', SnippetViewSet.as_view({'get': 'get_highlight'}, renderer_classes=[StaticHTMLRenderer]), name='snippet-highlight'),
 
 ]
